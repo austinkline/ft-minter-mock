@@ -1,0 +1,82 @@
+{
+	"networks": {
+		"emulator": "127.0.0.1:3569",
+		"mainnet": "access.mainnet.nodes.onflow.org:9000",
+		"sandboxnet": "access.sandboxnet.nodes.onflow.org:9000",
+		"testnet": "access.devnet.nodes.onflow.org:9000"
+	},
+	"accounts": {
+		"emulator-account": {
+			"address": "f8d6e0586b0a20c7",
+			"key": "5dffb9d730589e7e21cd4a7f625a6b8b8c4989a5d85fa97dabbc3d9827e8052c"
+		},
+		"emulator-ft": {
+			"address": "ee82856bf20e2aa6",
+			"key": "686779d775e5fcbf8d2f4a85cb4c53525d02b7ef53230d180fc16f35d9b7d025"
+		},
+		"emulator-flow": {
+			"address": "0ae53cb6e3f42a79",
+			"key": "686779d775e5fcbf8d2f4a85cb4c53525d02b7ef53230d180fc16f35d9b7d025"
+		}
+	},
+	"contracts": {
+		"Minter": "./contracts/Minter.cdc",
+		"FungibleToken": {
+			"source": "./contracts/standard/FungibleToken.cdc",
+			"aliases": {
+				"emulator": "0xee82856bf20e2aa6",
+				"testnet": "0x9a0766d93b6608b7",
+				"mainnet": "0xf233dcee88fe0abe"
+			}
+		},
+		"OnChainMultiSig": "./contracts/standard/OnChainMultiSig.cdc",
+		"FiatToken": {
+			"source": "./contracts/standard/FiatToken.cdc",
+			"aliases": {
+				"testnet": "0xa983fecbed621163",
+				"mainnet": "0xb19436aae4d94622"
+			}
+		},
+		"DapperUtilityCoin": {
+			"source": "./contracts/standard/DapperUtilityCoin.cdc",
+			"aliases": {
+				"emulator": "0xf8d6e0586b0a20c7",
+				"testnet": "0x82ec283f88a62e65",
+				"mainnet": "0xead892083b3e2c6c"
+			}
+		},
+		"FlowUtilityToken": {
+			"source": "./contracts/standard/FlowUtilityToken.cdc",
+			"aliases": {
+				"emulator": "0xf8d6e0586b0a20c7",
+				"testnet": "0x82ec283f88a62e65",
+				"mainnet": "0xead892083b3e2c6c"
+			}
+		},
+		"FlowToken": {
+			"source": "./contracts/standard/FlowToken.cdc",
+			"aliases": {
+				"emulator": "0x0ae53cb6e3f42a79",
+				"testnet": "0x7e60df042a9c0868",
+				"mainnet": "0x1654653399040a61"
+			}
+		}
+	},
+	"deployments": {
+		"emulator": {
+			"emulator-account": [
+				"Minter",
+				"DapperUtilityCoin",
+				"FlowUtilityToken",
+				"OnChainMultiSig",
+				"FiatToken"
+			],
+			"emulator-ft": [
+				"FungibleToken"
+			],
+			"emulator-flow": [
+				"FlowToken"
+			]
+		}
+	}
+}
