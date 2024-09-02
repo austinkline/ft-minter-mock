@@ -1,52 +1,45 @@
 import "FungibleToken"
 
-pub contract Minter {
-    pub let StoragePath: StoragePath
+access(all) contract Minter {
+    access(all) let StoragePath: StoragePath
 
-    pub event MinterAdded(_ t: Type)
+    access(all) resource interface FungibleTokenMinter {
+        access(all) let type: Type
+        access(all) let addr: Address
 
-    pub resource interface FungibleTokenMinter {
-        pub let type: Type
-        pub let addr: Address
-
-        pub fun mintTokens(acct: AuthAccount, amount: UFix64): @FungibleToken.Vault
+        access(all) fun mintTokens(acct: auth(Storage, Capabilities) &Account, amount: UFix64): @{FungibleToken.Vault}
     }
 
-    pub resource interface AdminPublic {
-        pub fun borrowMinter(_ t: Type): &{FungibleTokenMinter}?
-        pub fun getTypes(): [Type]
+    access(all) resource interface AdminPublic {
+        access(all) fun borrowMinter(_ t: Type): &{FungibleTokenMinter}?
+        access(all) fun getTypes(): [Type]
     }
 
-    pub resource Admin: AdminPublic {
-        pub let minters: @{Type: {FungibleTokenMinter}} // type to a minter interface
+    access(all) resource Admin: AdminPublic {
+        access(all) let minters: @{Type: {FungibleTokenMinter}} // type to a minter interface
 
-        pub fun registerMinter(_ m: @{FungibleTokenMinter}) {
-            emit MinterAdded(m.getType())
+        access(all) fun registerMinter(_ m: @{FungibleTokenMinter}) {
             destroy <- self.minters.insert(key: m.type, <- m)
         }
 
-        pub fun borrowMinter(_ t: Type): &{FungibleTokenMinter} {
+        access(all) fun borrowMinter(_ t: Type): &{FungibleTokenMinter} {
             return (&self.minters[t] as &{FungibleTokenMinter}?)!
         }
 
-        pub fun getTypes(): [Type] {
+        access(all) fun getTypes(): [Type] {
             return self.minters.keys
         }
 
         init() {
             self.minters <- {}
         }
-
-        destroy () {
-            destroy self.minters
-        }
     }
 
-    pub fun borrowAdminPublic(): &Admin{AdminPublic}? {
-        return self.account.borrow<&Admin{AdminPublic}>(from: self.StoragePath)
+    access(all) fun borrowAdminPublic(): &Admin {
+        return self.account.storage.borrow<&Admin>(from: self.StoragePath)!
     }
 
-    pub fun createAdmin(): @Admin {
+    access(all) fun createAdmin(): @Admin {
         return <- create Admin()
     }
 
@@ -54,7 +47,7 @@ pub contract Minter {
         self.StoragePath = /storage/MinterAdmin
 
         let a <- create Admin()
-        self.account.save(<- a, to: self.StoragePath)
+        self.account.storage.save(<- a, to: self.StoragePath)
     }
 }
  
